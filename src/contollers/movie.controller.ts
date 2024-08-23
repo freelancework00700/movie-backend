@@ -37,7 +37,7 @@ export class MovieController extends HttpStatus {
             }
 
             const { rows: movies, count } = await Movie.findAndCountAll(options);
-            if (count === 0) return this.sendBadRequestResponse(res, "No movies found.");
+            if (count === 0) return this.sendOkResponse(res, "No movies found.", { count, movies });
 
             return this.sendOkResponse(res, "Movies fetched successfully.", { count, movies });
         } catch (err) {
@@ -60,7 +60,7 @@ export class MovieController extends HttpStatus {
                 include: [{ model: User, as: 'user' }, { model: MediaRecords, as: 'media' }],
                 order: [['createdAt', 'DESC']],
             });
-            if (!movie) return this.sendBadRequestResponse(res, "No movie found.");
+            if (!movie) return this.sendOkResponse(res, "No movie found.", movie);
 
             return this.sendOkResponse(res, "Movie fetched successfully.", movie);
         } catch (err) {
